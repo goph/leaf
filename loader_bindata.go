@@ -1,6 +1,8 @@
 package leaf
 
-import "html/template"
+import (
+	"fmt"
+)
 
 // assetFunc is the function declared by go-bindata.
 type assetFunc func(string) ([]byte, error)
@@ -16,11 +18,15 @@ func NewBindataLoader(asset assetFunc) *BindataLoader {
 	}
 }
 
-func (l *BindataLoader) Load(name string) (*template.Template, error) {
-	asset, err := l.asset(name)
+func (l *BindataLoader) Load(name string) ([]byte, error) {
+	template, err := l.asset(name)
 	if err != nil {
+		if err.Error() == fmt.Sprintf("Asset %s not found", name) {
+			return nil, ErrTemplateNotFound
+		}
+
 		return nil, err
 	}
 
-	return template.New("").Parse(string(asset))
+	return template, nil
 }

@@ -1,8 +1,6 @@
 package leaf_test
 
 import (
-	"bufio"
-	"bytes"
 	"testing"
 
 	"github.com/goph/leaf"
@@ -17,14 +15,8 @@ func TestBindataLoader_Load(t *testing.T) {
 
 	loader := leaf.NewBindataLoader(assetFn)
 
-	tpl, err := loader.Load("path/to/template.html")
+	template, err := loader.Load("path/to/template.html")
 	require.NoError(t, err)
 
-	buf := new(bytes.Buffer)
-	writer := bufio.NewWriter(buf)
-	err = tpl.Execute(writer, nil)
-	require.NoError(t, err)
-	writer.Flush()
-
-	assert.Equal(t, "Hello World!", buf.String())
+	assert.Equal(t, []byte("Hello World!"), template)
 }

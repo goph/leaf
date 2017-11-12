@@ -15,21 +15,10 @@ import (
 func TestBuilder_Define(t *testing.T) {
 	loader := new(mocks.Loader)
 
-	base, err := template.New("base").Parse(`{{ block "header" . }}{{ end }}{{ block "main" . }}{{ end }}{{ block "footer" . }}{{ end }}`)
-	require.NoError(t, err)
-	loader.On("Load", "path/to/base.html").Return(base, nil).Once()
-
-	header, err := template.New("header").Parse(`{{ define "header" }}Header{{ end }}`)
-	require.NoError(t, err)
-	loader.On("Load", "path/to/header.html").Return(header, nil).Once()
-
-	main, err := template.New("main").Parse(`{{ define "main" }}Main{{ end }}`)
-	require.NoError(t, err)
-	loader.On("Load", "path/to/main.html").Return(main, nil).Once()
-
-	footer, err := template.New("footer").Parse(`{{ define "footer" }}Footer{{ end }}`)
-	require.NoError(t, err)
-	loader.On("Load", "path/to/footer.html").Return(footer, nil).Once()
+	loader.On("Load", "path/to/base.html").Return([]byte(`{{ block "header" . }}{{ end }}{{ block "main" . }}{{ end }}{{ block "footer" . }}{{ end }}`), nil).Once()
+	loader.On("Load", "path/to/header.html").Return([]byte(`{{ define "header" }}Header{{ end }}`), nil).Once()
+	loader.On("Load", "path/to/footer.html").Return([]byte(`{{ define "footer" }}Footer{{ end }}`), nil).Once()
+	loader.On("Load", "path/to/main.html").Return([]byte(`{{ define "main" }}Main{{ end }}`), nil).Once()
 
 	builder := leaf.NewBuilder(loader)
 

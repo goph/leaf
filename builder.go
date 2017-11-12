@@ -45,6 +45,7 @@ func (b *Builder) Execute(name string, wr io.Writer, data interface{}) error {
 // Define defines a new template based on dependencies.
 func (b *Builder) Define(name string, base string, dependencies ...string) {
 	b.definitions[name] = &loaderDefinition{
+		name:         name,
 		base:         base,
 		dependencies: dependencies,
 
@@ -102,24 +103,32 @@ func (d *templateDefinition) Resolve() (*template.Template, error) {
 
 // loaderDefinition loads a template along with it's dependencies using a user configured template loader.
 type loaderDefinition struct {
+	name         string
 	base         string
 	dependencies []string
 	loader       Loader
 }
 
 func (d *loaderDefinition) Resolve() (*template.Template, error) {
-	tpl, err := d.loader.Load(d.base)
+	tpl := template.New(d.name)
+
+	templateContent, err := d.loader.Load(d.base)
+	if err != nil {
+		return nil, err
+	}
+
+	tpl, err = tpl.Parse(string(templateContent))
 	if err != nil {
 		return nil, err
 	}
 
 	for _, dependency := range d.dependencies {
-		depTpl, err := d.loader.Load(dependency)
+		templateContent, err := d.loader.Load(dependency)
 		if err != nil {
 			return nil, err
 		}
 
-		_, err = tpl.AddParseTree(depTpl.Tree.Name, depTpl.Tree)
+		tpl, err = tpl.Parse(string(templateContent))
 		if err != nil {
 			return nil, err
 		}

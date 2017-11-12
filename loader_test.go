@@ -1,7 +1,6 @@
 package leaf_test
 
 import (
-	"html/template"
 	"testing"
 
 	"github.com/goph/leaf"
@@ -13,9 +12,7 @@ import (
 func TestCachedLoader_Load(t *testing.T) {
 	wrappedLoader := new(mocks.Loader)
 
-	expectedTemplate, err := template.New("test").Parse("Hello World!")
-	require.NoError(t, err)
-
+	expectedTemplate := []byte("Hello World!")
 	wrappedLoader.On("Load", "path/to/template.html").Return(expectedTemplate, nil).Once()
 
 	loader := leaf.NewCachedLoader(wrappedLoader)
@@ -35,14 +32,12 @@ func TestCachedLoader_Load_Error(t *testing.T) {
 
 	wrappedLoader.On("Load", "path/to/template.html").Return(nil, leaf.ErrTemplateNotFound).Once()
 
-	expectedTemplate, err := template.New("test").Parse("Hello World!")
-	require.NoError(t, err)
-
+	expectedTemplate := []byte("Hello World!")
 	wrappedLoader.On("Load", "path/to/template.html").Return(expectedTemplate, nil).Once()
 
 	loader := leaf.NewCachedLoader(wrappedLoader)
 
-	_, err = loader.Load("path/to/template.html")
+	_, err := loader.Load("path/to/template.html")
 	require.Error(t, err)
 	assert.Equal(t, leaf.ErrTemplateNotFound, err)
 

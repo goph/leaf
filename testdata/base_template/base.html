@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ block "head" . }}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{{ end }}
+
+{{ block "body" . }}
+<body>
+    {{ block "header" . }}<header>Header</header>{{ end }}
+    {{ block "main" . }}<main>Main</main>{{ end }}
+    {{ block "footer" . }}<footer>Footer</footer>{{ end }}
+</body>
+{{ end }}
+</html>

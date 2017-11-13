@@ -43,11 +43,10 @@ func (b *Builder) Execute(name string, wr io.Writer, data interface{}) error {
 }
 
 // Define defines a new template based on dependencies.
-func (b *Builder) Define(name string, base string, dependencies ...string) {
+func (b *Builder) Define(name string, templates ...string) {
 	b.definitions[name] = &loaderDefinition{
-		name:         name,
-		base:         base,
-		dependencies: dependencies,
+		name:      name,
+		templates: templates,
 
 		loader: b.loader,
 	}
@@ -103,26 +102,16 @@ func (d *templateDefinition) Resolve() (*template.Template, error) {
 
 // loaderDefinition loads a template along with it's dependencies using a user configured template loader.
 type loaderDefinition struct {
-	name         string
-	base         string
-	dependencies []string
-	loader       Loader
+	name      string
+	base      string
+	templates []string
+	loader    Loader
 }
 
 func (d *loaderDefinition) Resolve() (*template.Template, error) {
 	tpl := template.New(d.name)
 
-	templateContent, err := d.loader.Load(d.base)
-	if err != nil {
-		return nil, err
-	}
-
-	tpl, err = tpl.Parse(string(templateContent))
-	if err != nil {
-		return nil, err
-	}
-
-	for _, dependency := range d.dependencies {
+	for _, dependency := range d.templates {
 		templateContent, err := d.loader.Load(dependency)
 		if err != nil {
 			return nil, err

@@ -5,7 +5,7 @@ import (
 
 	"github.com/goph/leaf"
 	"github.com/goph/leaf/internal/mocks"
-	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 

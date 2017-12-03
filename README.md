@@ -11,13 +11,14 @@ Go comes with a great template engine, proven to work well in many applications
 "traditional" web development can quickly become cumbersome when using a lot of templates.
 
 Features like the idea of template inheritance, a central template container, sophisticated template loading
-mechanisms and many other are all found in well-known, "traditional" template engines commonly used for web development.
+mechanisms and many other are all found in well-known template engines commonly used for web development.
 Unfortunately these are all missing from Go, which is understandable since [simplicity](https://talks.golang.org/2015/simplicity-is-complicated.slide#4)
 is one of the key values of the Go language. But we still need a solution for these problems.
 
-Leaf tries to resolve some of these problems. It provides a loading mechanism for templates as well as the ability
-to define custom loading mechanisms. Once the templates are loaded, they are compiled into an immutable container
-when the application starts, so you can fail early if something is wrong.
+Leaf tries to address some of the issues mentioned above.
+It provides a loading mechanism for templates as well as the ability to define custom loading mechanisms.
+Once the templates are loaded, they are compiled into an immutable container.
+Preferably this is done when the application starts, so you can fail early if something is wrong.
 
 It also provides a way to reload templates when they are stored in files, so you can develop your application without
 recompiling it on every template change.

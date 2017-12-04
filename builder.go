@@ -82,7 +82,7 @@ func (b *Builder) Compile() (Container, error) {
 // Definitions are used internally to resolve templates.
 // Template resolution occurs either during "compilation" time (see Compile method of Builder)
 // or every time a template is fetched from the Builder. This is necessary, because the Builder is mutable,
-// so two between subsequent fetcher calls a template definition for the same name might change.
+// so between two subsequent fetcher calls a template definition for the same name might change.
 //
 // This behaviour is also useful for template development: templates can be reloaded (eg. when they are files)
 // without restarting the application. (Note that this is highly unrecommended for production usage)

@@ -24,6 +24,11 @@ It also provides a way to reload templates when they are stored in files, so you
 recompiling it on every template change.
 
 
+## Known limitations
+
+- Defined templates cannot depend on each other for the moment.
+
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
